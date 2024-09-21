@@ -19,14 +19,13 @@ const SearchTodos = () => {
     searchQuery: Yup.string().required("Search query is required")
   });
 
-  // Fetch all todos initially when the component mounts
   useEffect(() => {
     const fetchAllTodos = async () => {
       setIsFetching(true);
       try {
         const result = await fetchTodos();
         setTodos(result);
-        setFilteredTodos(result); // Initially display all todos
+        setFilteredTodos(result);
       } catch (error) {
         setErrorMessage("Error fetching initial data.");
       } finally {
@@ -43,14 +42,13 @@ const SearchTodos = () => {
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
-        validateOnChange={true} // Validate on change for real-time feedback
+        validateOnChange={false} // Disable validation on change
         validateOnBlur={false}
         onSubmit={(values, { setSubmitting }) => {
           const searchQuery = values.searchQuery.trim().toLowerCase();
 
-          // Check if the searchQuery is empty
           if (searchQuery === "") {
-            setFilteredTodos(todos); // Show all todos if the search box is cleared
+            setFilteredTodos(todos);
             setErrorMessage(""); // Clear error message
           } else {
             const filtered = todos.filter(todo =>
@@ -70,7 +68,6 @@ const SearchTodos = () => {
         }}
       >
         {({ isSubmitting, values }) => {
-          // Reset filteredTodos when searchQuery is cleared
           if (values.searchQuery === "") {
             setFilteredTodos(todos);
             setErrorMessage(""); // Clear error message when the search box is cleared
@@ -103,7 +100,7 @@ const SearchTodos = () => {
         }}
       </Formik>
 
-      {errorMessage && <p className="error">{errorMessage}</p>}
+      {/* {errorMessage && <p className="error">{errorMessage}</p>} */}
 
       <TodoList todos={filteredTodos} />
     </div>
